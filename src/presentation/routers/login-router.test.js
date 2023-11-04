@@ -5,7 +5,7 @@ import { jest } from '@jest/globals'
 
 const makeSut = () => {
   const authUseCase = {
-    auth: jest.fn()
+    auth: jest.fn(() => 'valid_token')
   }
 
   const sut = new LoginRouter(authUseCase)
@@ -67,11 +67,14 @@ describe('Login Router', () => {
   })
 
   test('Should return 401 when invalid credentials are provided', () => {
-    const { sut } = makeSut()
+    const authUseCase = {
+      auth: jest.fn(() => null) // it returns an invalid token when called
+    }
+    const sut = new LoginRouter(authUseCase)
     const httpRequest = {
       body: {
-        email: 'any@email.com',
-        password: 'any'
+        email: 'invalid@email.com',
+        password: 'invalid_pass'
       }
     }
     const httpResponse = sut.route(httpRequest)
@@ -101,5 +104,17 @@ describe('Login Router', () => {
     }
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+  })
+
+  test('Should return 200 when valid credentials are provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'any@email.com',
+        password: 'any'
+      }
+    }
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(200)
   })
 })

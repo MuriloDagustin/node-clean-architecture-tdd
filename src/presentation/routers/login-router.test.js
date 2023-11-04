@@ -1,4 +1,5 @@
 import MissingParamError from '../helpers/missing-param-error'
+import UnauthorizedError from '../helpers/unauthorized-error'
 import LoginRouter from './login-router'
 import { jest } from '@jest/globals'
 
@@ -63,5 +64,18 @@ describe('Login Router', () => {
     }
     sut.route(httpRequest)
     expect(authUseCase.auth).toHaveBeenCalledWith(httpRequest.body.email, httpRequest.body.password)
+  })
+
+  test('Should return 401 when invalid credentials are provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'any@email.com',
+        password: 'any'
+      }
+    }
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(401)
+    expect(httpResponse.body).toEqual(new UnauthorizedError())
   })
 })

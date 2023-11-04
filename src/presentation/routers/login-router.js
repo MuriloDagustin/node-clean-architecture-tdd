@@ -21,5 +21,7 @@ export default class LoginRouter {
     }
 
     this.authUseCase.auth(email, password)
+
+    return HttpResponse.unauthorizedError()
   }
 }

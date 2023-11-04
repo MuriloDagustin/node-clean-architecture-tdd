@@ -6,7 +6,7 @@ export default class LoginRouter {
   }
 
   route (httpRequest) {
-    if (!httpRequest || !httpRequest.body) {
+    if (!httpRequest?.body || !this.authUseCase?.auth) {
       return HttpResponse.serverError()
     }
 

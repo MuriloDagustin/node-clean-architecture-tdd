@@ -5,9 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch  --silent --colors --noStackTrace",
-    "test:staged": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests --findRelatedTests --silent --noStackTrace",
-    "test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --noStackTrace --silent",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js  --silent --colors --noStackTrace --passWithNoTests",
+    "test:unit": "npm test -- --watch",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage",
     "prepare": "husky install"
   },
   "standard": {

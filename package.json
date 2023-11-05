@@ -7,7 +7,7 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch  --silent --colors --noStackTrace",
     "test:staged": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests --findRelatedTests --silent --noStackTrace",
-    "test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --noStackTrace --silent",
     "prepare": "husky install"
   },
   "standard": {

@@ -22,6 +22,14 @@ const makeEmailValidator = () => {
   }
 }
 
+const makeEmailValidatorWithError = () => {
+  return {
+    isValid: jest.fn(() => {
+      throw new Error()
+    })
+  }
+}
+
 const makeAuthUseCase = () => {
   return {
     auth: jest.fn(async () => 'valid_token')
@@ -191,6 +199,21 @@ describe('Login Router', () => {
     const httpRequest = {
       body: {
         email: 'invalid_email.com',
+        password: 'any'
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('Should return 500 if EmailValidator throws', async () => {
+    const authUseCase = makeAuthUseCase()
+    const emailValidator = makeEmailValidatorWithError()
+    const sut = new LoginRouter(authUseCase, emailValidator)
+    const httpRequest = {
+      body: {
+        email: 'any@email.com',
         password: 'any'
       }
     }

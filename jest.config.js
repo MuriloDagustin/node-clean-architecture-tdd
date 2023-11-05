@@ -7,6 +7,7 @@
 const config = {
   // Indicates which provider should be used to instrument code for coverage
   coverageProvider: 'v8',
+  collectCoverageFrom: ['**/src/**/*.js'],
   transform: {},
   transformIgnorePatterns: ['<rootDir>/node_modules/']
 }

@@ -221,4 +221,16 @@ describe('Login Router', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
   })
+
+  test('Should call EmailValidator with correct email', async () => {
+    const { sut, emailValidator } = makeSut()
+    const httpRequest = {
+      body: {
+        email: 'any@email.com',
+        password: 'any'
+      }
+    }
+    await sut.route(httpRequest)
+    expect(emailValidator.isValid).toHaveBeenCalledWith(httpRequest.body.email)
+  })
 })

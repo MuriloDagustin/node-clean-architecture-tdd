@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll",
-    "test:staged": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch  --silent --colors --noStackTrace",
+    "test:staged": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests --findRelatedTests --silent --noStackTrace",
     "prepare": "husky install"
   },
   "standard": {

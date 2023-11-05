@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll",
-    "test:staged": "jest",
+    "test:staged": "jest --passWithNoTests",
     "prepare": "husky install"
   },
   "standard": {

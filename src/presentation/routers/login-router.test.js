@@ -1,3 +1,4 @@
+import InvalidParamError from '../helpers/invalid-param-error'
 import MissingParamError from '../helpers/missing-param-error'
 import ServerError from '../helpers/server-error'
 import UnauthorizedError from '../helpers/unauthorized-error'
@@ -6,11 +7,18 @@ import { jest } from '@jest/globals'
 
 const makeSut = () => {
   const authUseCase = makeAuthUseCase()
-  const sut = new LoginRouter(authUseCase)
-
+  const emailValidator = makeEmailValidator()
+  const sut = new LoginRouter(authUseCase, emailValidator)
   return {
     sut,
-    authUseCase
+    authUseCase,
+    emailValidator
+  }
+}
+
+const makeEmailValidator = () => {
+  return {
+    isValid: jest.fn((email) => email.includes('@'))
   }
 }
 
@@ -86,7 +94,7 @@ describe('Login Router', () => {
   })
 
   test('Should return 401 when invalid credentials are provided', async () => {
-    const sut = new LoginRouter(makeAuthUseCaseWithInvalidAccessToken())
+    const sut = new LoginRouter(makeAuthUseCaseWithInvalidAccessToken(), makeEmailValidator())
     const httpRequest = {
       body: {
         email: 'invalid@email.com',
@@ -147,5 +155,19 @@ describe('Login Router', () => {
     }
     const httpResponse = await sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
+  })
+
+  test('Should return 400 if an invalid email is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        email: 'invalid_email.com',
+        password: 'any'
+      }
+    }
+    const httpResponse = await sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
 })

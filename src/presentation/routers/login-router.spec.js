@@ -1,7 +1,4 @@
-import InvalidParamError from '../helpers/invalid-param-error'
-import MissingParamError from '../helpers/missing-param-error'
-import ServerError from '../helpers/server-error'
-import UnauthorizedError from '../helpers/unauthorized-error'
+import { InvalidParamError, MissingParamError, ServerError, UnauthorizedError } from '../errors'
 import LoginRouter from './login-router'
 import { jest } from '@jest/globals'
 

@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'
-import { InvalidParamError } from '../../presentation/errors'
+import { InvalidParamError } from '../../utils/errors'
 
 const makeSut = () => {
   const sut = {
@@ -18,12 +18,6 @@ const makeSut = () => {
 }
 
 describe('Auth UseCase', () => {
-  it('Should throw if no email is provided', async () => {
-    const { sut } = makeSut()
-    const promise = sut.auth()
-    expect(promise).rejects.toThrow()
-  })
-  
   it('Should throw if no email is provided', async () => {
     const { sut } = makeSut()
     const promise = sut.auth()

@@ -1,8 +1,8 @@
 import { jest } from '@jest/globals'
-import validator from '../../__mocks__/validator'
+import EmailValidator from './email-validator'
 
 const makeSut = () => {
-  const sut = validator
+  const sut = EmailValidator
 
   return {
     sut
@@ -12,22 +12,21 @@ const makeSut = () => {
 describe('Email Validator', () => {
   test('Should return true if validator returns true', () => {
     const { sut } = makeSut()
-    const isEmailValid = sut.isEmail('valid-email@email.com')
+    const isEmailValid = sut.isValid('valid-email@email.com')
     expect(isEmailValid).toBe(true)
   })
 
   test('Should return false if validator returns false', () => {
     const sut = {
-      isEmail: jest.fn(() => false)
+      isValid: jest.fn(() => false)
     }
-    const isEmailValid = sut.isEmail('invalid-email')
+    const isEmailValid = sut.isValid('invalid-email')
     expect(isEmailValid).toBe(false)
   })
 
   test('Should call validator with correct email', () => {
     const { sut } = makeSut()
-    const isEmailValid = sut.isEmail('invalid-email')
-    expect(isEmailValid).toBe(true)
-    expect(sut.isEmail).toHaveBeenCalledWith('invalid-email')
+    sut.isValid('email@email.com')
+    expect(sut.isValid).toHaveBeenCalledWith('email@email.com')
   })
 })

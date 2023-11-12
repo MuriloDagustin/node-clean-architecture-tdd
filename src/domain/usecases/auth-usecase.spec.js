@@ -1,24 +1,10 @@
 import { jest } from '@jest/globals'
 import { InvalidParamError } from '../../utils/errors'
+import AuthUseCase from './auth-usecase'
 
 const makeSut = () => {
   const loadUserByEmailRepository = makeLoadUserByEmailRepository()
-
-  const sut = {
-    auth: jest.fn(async (email, password) => {
-      if (!email) {
-        throw new InvalidParamError('email')
-      }
-
-      if (!password) {
-        throw new InvalidParamError('password')
-      }
-
-      loadUserByEmailRepository.load(email)
-
-      return 'valid_acces'
-    })
-  }
+  const sut = new AuthUseCase(loadUserByEmailRepository)
 
   return {
     sut,
@@ -49,5 +35,17 @@ describe('Auth UseCase', () => {
     const { sut, loadUserByEmailRepository } = makeSut()
     sut.auth('any_mail@mail.com', 'any_password')
     expect(loadUserByEmailRepository.load).toHaveBeenCalledWith('any_mail@mail.com')
+  })
+
+  it('Should throw if no repository is provided', async () => {
+    const sut = new AuthUseCase()
+    const promise = sut.auth('any_mail@mail.com', 'any_password')
+    expect(promise).rejects.toThrow(new InvalidParamError('emailRepository'))
+  })
+
+  it('Should throw if repository has no auth method', async () => {
+    const sut = new AuthUseCase({})
+    const promise = sut.auth('any_mail@mail.com', 'any_password')
+    expect(promise).rejects.toThrow(new InvalidParamError('emailRepository'))
   })
 })

@@ -2,6 +2,8 @@ import { jest } from '@jest/globals'
 import { InvalidParamError } from '../../utils/errors'
 
 const makeSut = () => {
+  const loadUserByEmailRepository = makeLoadUserByEmailRepository()
+
   const sut = {
     auth: jest.fn(async (email, password) => {
       if (!email) {
@@ -12,12 +14,21 @@ const makeSut = () => {
         throw new InvalidParamError('password')
       }
 
+      loadUserByEmailRepository.load(email)
+
       return 'valid_acces'
     })
   }
 
   return {
-    sut
+    sut,
+    loadUserByEmailRepository
+  }
+}
+
+const makeLoadUserByEmailRepository = () => {
+  return {
+    load: jest.fn((email) => {})
   }
 }
 
@@ -32,5 +43,11 @@ describe('Auth UseCase', () => {
     const { sut } = makeSut()
     const promise = sut.auth('any_mail@mail.com')
     expect(promise).rejects.toThrow(new InvalidParamError('password'))
+  })
+
+  it('Should call LoadUserByEmailRepository with correct email', async () => {
+    const { sut, loadUserByEmailRepository } = makeSut()
+    sut.auth('any_mail@mail.com', 'any_password')
+    expect(loadUserByEmailRepository.load).toHaveBeenCalledWith('any_mail@mail.com')
   })
 })

@@ -18,6 +18,12 @@ export default class AuthUseCase {
       throw new InvalidParamError('emailRepository')
     }
 
-    this.emailRepository.load(email)
+    const user = this.emailRepository.load(email)
+
+    if (!user) {
+      return null
+    }
+
+    return user
   }
 }

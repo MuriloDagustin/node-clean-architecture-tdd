@@ -48,4 +48,10 @@ describe('Auth UseCase', () => {
     const promise = sut.auth('any_mail@mail.com', 'any_password')
     expect(promise).rejects.toThrow(new InvalidParamError('emailRepository'))
   })
+
+  it('Should return null if EmailRepository returns null', async () => {
+    const { sut } = makeSut()
+    const accessToken = await sut.auth('any_mail@mail.com', 'any_password')
+    expect(accessToken).toBeNull()
+  })
 })
